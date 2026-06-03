@@ -46,6 +46,8 @@ class YamahaBarClient:
         self._address = address
         self._name = name
         self._client: BleakClientWithServiceCache | None = None
+        self._write_char: BleakGATTCharacteristic | None = None
+        self._write_response = False
         self._decoder = FrameDecoder()
         self._write_lock = asyncio.Lock()
         self._connect_lock = asyncio.Lock()
@@ -84,6 +86,20 @@ class YamahaBarClient:
                 self._name,
                 disconnected_callback=self._on_disconnect,
             )
+            # Resolve the write characteristic and choose the write type from
+            # its advertised properties. The bar's TX characteristic typically
+            # only supports Write Without Response; forcing a response yields
+            # GATT error 3 (write not permitted).
+            self._write_char = self._client.services.get_characteristic(WRITE_UUID)
+            if self._write_char is None:
+                raise ConnectionError("write characteristic not found")
+            self._write_response = "write" in self._write_char.properties
+            _LOGGER.debug(
+                "%s write char props=%s response=%s",
+                self._name,
+                self._write_char.properties,
+                self._write_response,
+            )
             await self._client.start_notify(NOTIFY_UUID, self._on_notify)
             await self._send(hello_frame())
             await self.refresh()
@@ -100,6 +116,7 @@ class YamahaBarClient:
     def _on_disconnect(self, _client: BleakClientWithServiceCache) -> None:
         _LOGGER.debug("%s disconnected", self._name)
         self._client = None
+        self._write_char = None
         self._decoder = FrameDecoder()
 
     def _on_notify(
@@ -115,9 +132,11 @@ class YamahaBarClient:
     async def _send(self, frame: bytes) -> None:
         if not self.connected:
             await self.ensure_connected()
-        assert self._client is not None
+        assert self._client is not None and self._write_char is not None
         async with self._write_lock:
-            await self._client.write_gatt_char(WRITE_UUID, frame, response=True)
+            await self._client.write_gatt_char(
+                self._write_char, frame, response=self._write_response
+            )
             await asyncio.sleep(WRITE_GAP)
 
     async def refresh(self) -> None:
