@@ -1,0 +1,9 @@
+# Reverse-engineering artifacts — keep out of the published integration repo
+*.apk
+apk_extract/
+jadx_out/
+jadx_full/
+
+# Python
+__pycache__/
+*.py[cod]

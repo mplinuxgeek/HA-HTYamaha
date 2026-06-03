@@ -1,0 +1,58 @@
+{
+  "config": {
+    "flow_title": "{name}",
+    "step": {
+      "user": {
+        "title": "Yamaha Sound Bar",
+        "description": "Select a discovered sound bar to set up.",
+        "data": {
+          "address": "Device"
+        }
+      },
+      "confirm": {
+        "title": "Yamaha Sound Bar",
+        "description": "Do you want to set up {name}?"
+      }
+    },
+    "abort": {
+      "no_devices_found": "No unconfigured Yamaha sound bars found in range.",
+      "already_configured": "This sound bar is already configured."
+    }
+  },
+  "entity": {
+    "switch": {
+      "clearvoice": { "name": "Clear Voice" },
+      "enhancer": { "name": "Music Enhancer" },
+      "bassext": { "name": "Bass Extension" },
+      "surround3d": { "name": "3D Surround" },
+      "univolume": { "name": "UniVolume" },
+      "dialoglift": { "name": "Dialogue Lift" },
+      "adaptive_drc": { "name": "Adaptive DRC" },
+      "bt_standby": { "name": "Bluetooth Standby" },
+      "hdmi_control": { "name": "HDMI Control" }
+    },
+    "select": {
+      "dsp_program": { "name": "DSP Program" }
+    },
+    "button": {
+      "treble_up": { "name": "Treble Up" },
+      "treble_down": { "name": "Treble Down" },
+      "bass_up": { "name": "Bass Up" },
+      "bass_down": { "name": "Bass Down" },
+      "swlevel_up": { "name": "Subwoofer Up" },
+      "swlevel_down": { "name": "Subwoofer Down" },
+      "menu_setup": { "name": "Menu Setup" },
+      "menu_info": { "name": "Menu Info" },
+      "menu_option": { "name": "Menu Option" },
+      "menu_up": { "name": "Menu Up" },
+      "menu_down": { "name": "Menu Down" },
+      "menu_left": { "name": "Menu Left" },
+      "menu_right": { "name": "Menu Right" },
+      "menu_enter": { "name": "Menu Enter" },
+      "menu_return": { "name": "Menu Return" },
+      "memory_ysp_l": { "name": "Recall Memory L" },
+      "memory_ysp_c": { "name": "Recall Memory C" },
+      "memory_ysp_r": { "name": "Recall Memory R" }
+    }
+  }
+}
