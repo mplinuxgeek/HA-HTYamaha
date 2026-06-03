@@ -17,8 +17,11 @@ class YamahaEntity(CoordinatorEntity[YamahaCoordinator]):
     def __init__(self, coordinator: YamahaCoordinator) -> None:
         super().__init__(coordinator)
         address = coordinator.client.address
+        # Identify by domain+address only. We deliberately omit the
+        # `connections` (bluetooth, mac) entry: when another integration (e.g. a
+        # Shelly/BTHome BLU gateway) registers the same MAC, HA would otherwise
+        # merge the two device-registry entries into one.
         self._attr_device_info = DeviceInfo(
-            connections={("bluetooth", address)},
             identifiers={(DOMAIN, address)},
             manufacturer="Yamaha",
             name=coordinator.config_entry.title,
